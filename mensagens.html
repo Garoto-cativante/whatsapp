@@ -3,107 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aviso de Monitoramento</title>
+    <title>Monitoramento de Transação</title>
     <style>
         body {
-            background-color: black;
-            color: red;
-            text-align: center;
             font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #111;
+            color: #f00;
         }
-        h1 {
-            font-size: 40px;
-            animation: piscar 1s infinite alternate;
-        }
-        p, pre {
-            font-size: 20px;
-            font-weight: bold;
-            margin: 20px;
-            white-space: pre-wrap;
-            text-align: left;
-            background: rgba(255, 0, 0, 0.2);
-            padding: 10px;
+        .container {
+            background: #222;
+            padding: 20px;
             border-radius: 10px;
-            display: inline-block;
-        }
-        @keyframes piscar {
-            0% { opacity: 1; }
-            100% { opacity: 0; }
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
         }
     </style>
-    <script>
-        async function getIP() {
-            let response = await fetch('https://api64.ipify.org?format=json');
-            let data = await response.json();
-            return data.ip;
-        }
-
-        async function getLocation(ip) {
-            let response = await fetch(`https://ipapi.co/${ip}/json/`);
-            let data = await response.json();
-            return data;
-        }
-
-        function playSound() {
-            let audio = new Audio('https://www.soundjay.com/button/beep-07.wav');
-            audio.loop = true;
-            audio.play();
-        }
-
-        async function showWarning() {
-            let ip = await getIP();
-            let locationData = await getLocation(ip);
-
-            let message = `
-🚨 ALERTA DE MONITORAMENTO 🚨
-
-🔴 Atividade suspeita detectada.
-🔎 IP: ${ip}
-📍 Localização aproximada: ${locationData.city}, ${locationData.region}, ${locationData.country_name}
-
-🚨 SEU DISPOSITIVO ESTÁ SENDO RASTREADO 🚨
-
-📡 Dados enviados para o sistema de segurança cibernética.
-⚠️ O responsável deve regularizar a situação imediatamente.
-            `;
-
-            alert(message);
-            document.getElementById("info").innerText = message;
-            playSound();
-        }
-
-        function preventExit(event) {
-            event.preventDefault();
-            event.returnValue = 'Tem certeza que deseja sair? Seu dispositivo já foi identificado.';
-        }
-
-        function openFullscreen() {
-            if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen();
-            }
-        }
-
-        window.onload = function () {
-            openFullscreen();
-            showWarning();
-        };
-        window.onbeforeunload = preventExit;
-    </script>
 </head>
 <body>
-    <h1>⚠️ SUA ATIVIDADE ESTÁ SENDO MONITORADA ⚠️</h1>
-    <p id="info"></p>
-
-    <h2>📩 Mensagens Obtidas 📩</h2>
-    <pre>
-[10:22, 12/03/2025] David: Bom dia, como funciona, tenho disponibilidade de investir com 500 mts?
-[10:24, 12/03/2025] +258 83 435 0264: Quer mudar de vida? Invista com retornos rápidos e garantidos!
-[10:29, 12/03/2025] +258 83 435 0264: Se investir 500Mts o seu retorno será de 3000Mts dentro de 2 horas...
-[17:01, 12/03/2025] +258 83 435 0264: Infelizmente enfrentamos uma pequena dificuldade...
-[17:22, 12/03/2025] David: Estou bem, não tenho 350 no momento.
-[17:24, 12/03/2025] +258 83 435 0264: 250???
-[17:35, 12/03/2025] David: Man, você disse para investir 500 então, agora tou a espera
-[17:36, 12/03/2025] +258 83 435 0264: Verdade...
-    </pre>
+    <div class="container">
+        <h1>ALERTA DE MONITORAMENTO</h1>
+        <p>Detectamos uma atividade suspeita associada a esta transação.</p>
+        <p><strong>Endereço IP:</strong> <span id="ip"></span></p>
+        <p><strong>Localização Aproximada:</strong> <span id="location"></span></p>
+        <p><strong>Dispositivo:</strong> <span id="device"></span></p>
+        <p><strong>Marca e Modelo:</strong> <span id="brand-model"></span></p>
+        <p><strong>Sistema Operacional:</strong> <span id="os"></span></p>
+        <p><strong>Navegador:</strong> <span id="browser"></span></p>
+        <p>Todos os dados do seu dispositivo estão a ser monitorados e foram registrados para verificação.</p>
+    </div>
+    
+    <script>
+        async function fetchIP() {
+            try {
+                let res = await fetch('https://api64.ipify.org?format=json');
+                let data = await res.json();
+                document.getElementById('ip').innerText = data.ip;
+                
+                let locationRes = await fetch(`https://ipapi.co/${data.ip}/json/`);
+                let locationData = await locationRes.json();
+                document.getElementById('location').innerText = `${locationData.city}, ${locationData.region}, ${locationData.country_name}`;
+            } catch (error) {
+                document.getElementById('ip').innerText = "Não encontrado";
+                document.getElementById('location').innerText = "Não disponível";
+            }
+        }
+        
+        function detectDevice() {
+            let userAgent = navigator.userAgent;
+            let device = "Desconhecido";
+            let brandModel = "Não disponível";
+            let os = "Não identificado";
+            let browser = "Não identificado";
+            
+            if (/Windows/i.test(userAgent)) os = "Windows";
+            else if (/Mac OS/i.test(userAgent)) os = "Mac OS";
+            else if (/Android/i.test(userAgent)) os = "Android";
+            else if (/iPhone|iPad/i.test(userAgent)) os = "iOS";
+            else if (/Linux/i.test(userAgent)) os = "Linux";
+            
+            if (/Chrome/i.test(userAgent)) browser = "Google Chrome";
+            else if (/Firefox/i.test(userAgent)) browser = "Mozilla Firefox";
+            else if (/Safari/i.test(userAgent) && !/Chrome/i.test(userAgent)) browser = "Safari";
+            else if (/Edge/i.test(userAgent)) browser = "Microsoft Edge";
+            else if (/Opera|OPR/i.test(userAgent)) browser = "Opera";
+            
+            if (/mobile/i.test(userAgent)) {
+                device = "Celular";
+                if (/Android/i.test(userAgent)) {
+                    brandModel = userAgent.match(/Android\s[\d\.]+;\s([^;]+)/i);
+                } else if (/iPhone/i.test(userAgent)) {
+                    brandModel = "Apple iPhone";
+                } else if (/iPad/i.test(userAgent)) {
+                    brandModel = "Apple iPad";
+                }
+            } else if (/tablet/i.test(userAgent)) {
+                device = "Tablet";
+            } else {
+                device = "Computador";
+            }
+            
+            document.getElementById('device').innerText = device;
+            document.getElementById('brand-model').innerText = brandModel ? brandModel[1] : "Não identificado";
+            document.getElementById('os').innerText = os;
+            document.getElementById('browser').innerText = browser;
+        }
+        
+        fetchIP();
+        detectDevice();
+    </script>
 </body>
 </html>
