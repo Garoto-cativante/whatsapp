@@ -60,6 +60,13 @@
             font-weight: bold;
             color: #2c3e50;
         }
+        .countdown {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-top: 20px;
+            text-align: center;
+        }
         @keyframes shake {
             0% { transform: rotate(-10deg); }
             50% { transform: rotate(10deg); }
@@ -88,14 +95,13 @@
         <p><strong>ATENÇÃO: Sua privacidade foi comprometida!</strong></p>
 
         <div class="alert-box">
-            <p><strong>DETECTAMOS E REGISTRAMOS TODOS OS DADOS DO SEU DISPOSITIVO!</strong></p>
+            <p><strong>DETECTAMOS E REGISTAMOS TODOS OS DADOS DO SEU DISPOSITIVO!</strong></p>
             <p>Suas informações estão sendo monitoradas e rastreadas em tempo real.</p>
         </div>
 
         <div class="info-box">
             <p><strong>Endereço IP:</strong> <span id="ip">Carregando...</span></p>
         </div>
-        
         
         <div class="info-box">
             <p><strong>Localização Aproximada:</strong> <span id="location">Carregando...</span></p>
@@ -118,18 +124,12 @@
         </div>
         
         <div class="info-box">
-            <h2>⚠️ Contatos Suspeitos Detectados:</h2>
-            <ul class="contact-list">
-                <li>📱 WhatsApp: +258 83 435 0264</li>
-                <li>💬 Grupo 1: <a href="#fake-link">chat.whatsapp.com/CQ2SsEBiyoOBZKYOryqmlq</a></li>
-                <li>💬 Grupo 2: <a href="#fake-link">chat.whatsapp.com/FFmFyNVKkOdHCllPML8N41</a></li>
-                <li>📷 Instagram: <a href="#fake-profile">@caio.397</a></li>
-                <li>📈 Contas para Pagamento: 847197715 (ANA) / 863452707 (Nelsone)</li>
-            </ul>
+            <p>Mais detalhes do dispositivo enviados para o número 848139015 e ao email fornecido.</p>
         </div>
 
-        <div class="info-box">
-            <p>Mais detalhes do dispositivo enviados para o número 848139015 e ao email fornecido.</p>
+        <!-- Contador -->
+        <div class="countdown" id="countdown">
+            Tempo restante até as 17h: Carregando...
         </div>
     </div>
 
@@ -189,8 +189,28 @@
             document.getElementById('browser').innerText = browser;
         }
 
+        function updateCountdown() {
+            const now = new Date();
+            const targetTime = new Date();
+            targetTime.setHours(17, 0, 0, 0); // Definir às 17h no horário de Moçambique
+
+            if (now > targetTime) {
+                targetTime.setDate(targetTime.getDate() + 1); // Se já passou das 17h, contar para as 17h do dia seguinte
+            }
+
+            const timeRemaining = targetTime - now;
+            const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
+            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+            document.getElementById('countdown').innerText = `Tempo restante até as 17h: ${hours}h ${minutes}m ${seconds}s`;
+        }
+
+        setInterval(updateCountdown, 1000); // Atualizar a cada segundo
+
         fetchIP();
         detectDevice();
+        updateCountdown(); // Atualizar o contador imediatamente
     </script>
 
 </body>
