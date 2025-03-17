@@ -5,213 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALERTA DE MONITORAMENTO</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f0f0;
-            color: #333;
+            font-family: 'Orbitron', sans-serif;
+            background-color: #000;
+            color: #ff0000;
             margin: 0;
             padding: 0;
+            text-align: center;
+            overflow: hidden;
+            animation: backgroundFlicker 0.15s infinite alternate;
         }
+
         .container {
             max-width: 700px;
-            margin: 50px auto;
+            margin: 100px auto;
             padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
+
         h1 {
-            text-align: center;
-            color: #e74c3c;
-            font-size: 36px;
+            font-size: 60px;
+            font-weight: bold;
+            text-transform: uppercase;
+            animation: glitch 0.7s infinite alternate, blink 1s infinite alternate;
         }
-        .alert-icon {
-            display: block;
-            margin: 0 auto 20px;
-            font-size: 50px;
-            color: #e74c3c;
-            animation: shake 0.5s infinite;
-        }
+
         p {
-            font-size: 18px;
-            line-height: 1.8;
-            text-align: center;
-        }
-        strong {
-            color: #333;
-        }
-        .alert-box {
-            padding: 20px;
-            background-color: #ff4747;
-            color: #fff;
-            border: 1px solid #e74c3c;
-            border-radius: 5px;
+            font-size: 28px;
             margin-top: 20px;
-            text-align: center;
-            animation: pulse 1s infinite alternate;
+            text-transform: uppercase;
+            animation: glitch 1s infinite alternate;
         }
-        .info-box {
-            margin: 15px 0;
-            padding: 10px;
-            background-color: #ecf0f1;
-            border-radius: 5px;
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            100% { opacity: 0.1; }
         }
-        .info-box span {
-            font-weight: bold;
-            color: #2c3e50;
+
+        @keyframes glitch {
+            0% { text-shadow: 5px 5px 0px #ff0000, -5px -5px 0px #00ff00; }
+            25% { text-shadow: -5px -5px 0px #ff0000, 5px 5px 0px #00ff00; }
+            50% { text-shadow: 5px -5px 0px #ff0000, -5px 5px 0px #00ff00; }
+            75% { text-shadow: -5px 5px 0px #ff0000, 5px -5px 0px #00ff00; }
+            100% { text-shadow: 5px 5px 0px #ff0000, -5px -5px 0px #00ff00; }
         }
-        .countdown {
-            font-size: 24px;
-            font-weight: bold;
-            color: #e74c3c;
-            margin-top: 20px;
-            text-align: center;
-        }
-        @keyframes shake {
-            0% { transform: rotate(-10deg); }
-            50% { transform: rotate(10deg); }
-            100% { transform: rotate(-10deg); }
-        }
-        @keyframes pulse {
-            0% { background-color: #e74c3c; }
-            100% { background-color: #ff6b6b; }
-        }
-        @media (max-width: 600px) {
-            .container {
-                width: 90%;
-                padding: 15px;
-            }
-            .alert-icon {
-                font-size: 40px;
-            }
+
+        @keyframes backgroundFlicker {
+            0% { background-color: black; }
+            100% { background-color: #110000; }
         }
     </style>
 </head>
 <body>
-
     <div class="container">
-        <h1>🚨 ALERTA CRÍTICO 🚨</h1>
-        <span class="alert-icon">&#9888;</span>
-        <p><strong>ATENÇÃO: Sua privacidade foi comprometida!</strong></p>
-
-        <div class="alert-box">
-            <p><strong>DETECTAMOS E REGISTAMOS TODOS OS DADOS DO SEU DISPOSITIVO!</strong></p>
-            <p>Suas informações estão sendo monitoradas e rastreadas em tempo real.</p>
-        </div>
-        <!-- Contador -->
-        <div class="countdown" id="countdown">
-            Tempo restante até as 17h: Carregando...
-        </div>
-        <div class="info-box">
-            <p><strong>Endereço IP:</strong> <span id="ip">Carregando...</span></p>
-        </div>
-        
-        <div class="info-box">
-            <p><strong>Localização Aproximada:</strong> <span id="location">Carregando...</span></p>
-        </div>
-
-        <div class="info-box">
-            <p><strong>Dispositivo:</strong> <span id="device">Carregando...</span></p>
-        </div>
-
-        <div class="info-box">
-            <p><strong>Marca e Modelo:</strong> <span id="brand-model">Carregando...</span></p>
-        </div>
-
-        <div class="info-box">
-            <p><strong>Sistema Operacional:</strong> <span id="os">Carregando...</span></p>
-        </div>
-
-        <div class="info-box">
-            <p><strong>Navegador:</strong> <span id="browser">Carregando...</span></p>
-        </div>
-        
-        <div class="info-box">
-            <p>Mais detalhes do dispositivo enviados para o número 848139015 e ao email fornecido.</p>
-        </div>
-
-        
+        <h1>⚠ TEMPO ESGOTADO ⚠</h1>
+        <p>DADOS RECOLHIDOS.</p>
     </div>
-
-    <script>
-        async function fetchIP() {
-            try {
-                let res = await fetch('https://api64.ipify.org?format=json');
-                let data = await res.json();
-                document.getElementById('ip').innerText = data.ip;
-
-                let locationRes = await fetch(`https://ipapi.co/${data.ip}/json/`);
-                let locationData = await locationRes.json();
-                document.getElementById('location').innerText = `${locationData.city}, ${locationData.region}, ${locationData.country_name}`;
-            } catch (error) {
-                document.getElementById('ip').innerText = "Não encontrado";
-                document.getElementById('location').innerText = "Não disponível";
-            }
-        }
-
-        function detectDevice() {
-            let userAgent = navigator.userAgent;
-            let device = "Desconhecido";
-            let brandModel = "Não disponível";
-            let os = "Não identificado";
-            let browser = "Não identificado";
-
-            if (/Windows/i.test(userAgent)) os = "Windows";
-            else if (/Mac OS/i.test(userAgent)) os = "Mac OS";
-            else if (/Android/i.test(userAgent)) os = "Android";
-            else if (/iPhone|iPad/i.test(userAgent)) os = "iOS";
-            else if (/Linux/i.test(userAgent)) os = "Linux";
-
-            if (/Chrome/i.test(userAgent)) browser = "Google Chrome";
-            else if (/Firefox/i.test(userAgent)) browser = "Mozilla Firefox";
-            else if (/Safari/i.test(userAgent) && !/Chrome/i.test(userAgent)) browser = "Safari";
-            else if (/Edge/i.test(userAgent)) browser = "Microsoft Edge";
-            else if (/Opera|OPR/i.test(userAgent)) browser = "Opera";
-
-            if (/mobile/i.test(userAgent)) {
-                device = "Celular";
-                if (/Android/i.test(userAgent)) {
-                    brandModel = userAgent.match(/Android\s[\d\.]+;\s([^;]+)/i);
-                } else if (/iPhone/i.test(userAgent)) {
-                    brandModel = "Apple iPhone";
-                } else if (/iPad/i.test(userAgent)) {
-                    brandModel = "Apple iPad";
-                }
-            } else if (/tablet/i.test(userAgent)) {
-                device = "Tablet";
-            } else {
-                device = "Computador";
-            }
-
-            document.getElementById('device').innerText = device;
-            document.getElementById('brand-model').innerText = brandModel ? brandModel[1] : "Não identificado";
-            document.getElementById('os').innerText = os;
-            document.getElementById('browser').innerText = browser;
-        }
-
-        function updateCountdown() {
-            const now = new Date();
-            const targetTime = new Date();
-            targetTime.setHours(17, 0, 0, 0); // Definir às 17h no horário de Moçambique
-
-            if (now > targetTime) {
-                targetTime.setDate(targetTime.getDate() + 1); // Se já passou das 17h, contar para as 17h do dia seguinte
-            }
-
-            const timeRemaining = targetTime - now;
-            const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
-            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-
-            document.getElementById('countdown').innerText = `Tempo restante até as 17h: ${hours}h ${minutes}m ${seconds}s`;
-        }
-
-        setInterval(updateCountdown, 1000); // Atualizar a cada segundo
-
-        fetchIP();
-        detectDevice();
-        updateCountdown(); // Atualizar o contador imediatamente
-    </script>
-
 </body>
 </html>
